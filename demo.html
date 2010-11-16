@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+
+<html>
+   <head>
+      <meta charset="utf-8">
+      <title>AudioAlert Test</title>
+
+      <style>
+         p { text-align: center; }
+         #countdown { font: 540px sans-serif; }
+      </style>
+
+      <!-- audioalert requires swfobject for flash-fallback -->
+      <script src="https://ajax.googleapis.com/ajax/libs/swfobject/2.2/swfobject.js"></script>
+      <script src="audioalert-1.0.min.js"></script>
+   </head>
+   <body>
+      <p><span id="countdown">?</span></p>
+      <p><a href="https://github.com/JessThrysoee/audioalert">AudioAlert on github</a></p>
+
+
+      <script>
+         // expected error
+         AudioAlert({
+            ogg: 'sound/doesnotexist.ogg',
+            mp3: 'sound/doesnotexist.mp3',
+            error: function () {
+               msg('doesnotexist: expected error');
+            }
+         });
+
+         // play welcome asap, and after 'ended' event start countdown
+         AudioAlert({
+            ogg: 'sound/welcome.ogg',
+            mp3: 'sound/welcome.mp3',
+            swf: 'audioalert-1.0.swf',
+            loadeddata: function () {
+               msg('welcome: loadeddata');
+            },
+            ended: countdown
+         }).play();  // play asap
+
+
+         // load the gong
+         var gong = AudioAlert({
+            ogg: 'sound/gong.ogg',
+            mp3: 'sound/gong.mp3',
+            loadeddata: function () {
+               msg('gong: loadeddata');
+            },
+         });
+
+         // bind event handler on gong 'ended'
+         gong.bind('ended', function () {
+            msg('gong ended (bind)');
+         });
+
+         // count down from five and sound the gong on zero
+         function countdown() {
+            var el, i, id;
+
+            msg('welcome: ended');
+
+            el = document.getElementById('countdown');
+            el.innerHTML = i = 5;
+
+            id = setInterval(function () {
+
+               el.innerHTML = --i;
+
+               if (i <= 0) {
+                  clearInterval(id);
+                  // sound the gong
+                  gong.play();
+               }
+            }, 1000);
+         }
+
+         // display debug msg
+         function msg(txt) {
+            var el = document.createElement('p');
+            el.innerHTML = txt;
+            document.body.appendChild(el);
+         }
+
+      </script>
+
+   </body>
+</html>
+

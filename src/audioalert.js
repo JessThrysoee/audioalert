@@ -27,18 +27,20 @@ var AudioAlert = (function () {
       html5: function (options) {
          var audio, o = options;
 
+         this.options = options;
+
          audio = new Audio();
          audio.src = audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
 
          //http://dev.w3.org/html5/spec-author-view/video.html#mediaevents
          if (o.loadeddata) {
-            this.audio.addEventListener('loadeddata', o.loadeddata, false);
+            audio.addEventListener('loadeddata', o.loadeddata, false);
          }
          if (o.ended) {
-            this.audio.addEventListener('ended', o.ended, false);
+            audio.addEventListener('ended', o.ended, false);
          }
          if (o.error) {
-            this.audio.addEventListener('error', o.error, false);
+            audio.addEventListener('error', o.error, false);
          }
 
          this.audio = audio;
@@ -67,6 +69,10 @@ var AudioAlert = (function () {
    AudioAlert.prototype.html5.prototype = {
       play: function () {
          this.audio.play();
+      },
+      bind: function (eventType, handler) {
+         this.options[eventType] = handler;
+         this.audio.addEventListener(eventType, handler, false);
       }
    };
 
@@ -110,6 +116,10 @@ var AudioAlert = (function () {
             // play as soon as flash and swfobject are ready
             this.pendingPlay = true;
          }
+      },
+
+      bind: function (eventType, handler) {
+         this.options[eventType] = handler;
       }
    };
 
