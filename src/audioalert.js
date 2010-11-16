@@ -13,7 +13,7 @@
 var AudioAlert = (function () {
 
    var AudioAlert = function (options) {
-      if ('Audiox' in window) {
+      if ('Audio' in window) {
          //html5
          return new AudioAlert.prototype.html5(options);
       } else {
