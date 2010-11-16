@@ -1,4 +1,6 @@
 
+DirectoryIndex demo.html
+
 AddType application/x-shockwave-flash swf
 AddType audio/mpeg mp3
 AddType audio/ogg ogg
