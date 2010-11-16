@@ -13,7 +13,7 @@
 var AudioAlert = (function () {
 
    var AudioAlert = function (options) {
-      if ('Audio' in window) {
+      if ('Audiox' in window) {
          //html5
          return new AudioAlert.prototype.html5(options);
       } else {
@@ -24,24 +24,41 @@ var AudioAlert = (function () {
 
    AudioAlert.prototype = {
       //html5
-      html5: function (o) {
-         this.audio = new Audio();
-         this.audio.src = this.audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
+      html5: function (options) {
+         var audio, o = options;
+
+         audio = new Audio();
+         audio.src = audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
+
+         //http://dev.w3.org/html5/spec-author-view/video.html#mediaevents
+         if (o.loadeddata) {
+            this.audio.addEventListener('loadeddata', o.loadeddata, false);
+         }
+         if (o.ended) {
+            this.audio.addEventListener('ended', o.ended, false);
+         }
+         if (o.error) {
+            this.audio.addEventListener('error', o.error, false);
+         }
+
+         this.audio = audio;
       },
 
       //flash
-      flash: function (o) {
+      flash: function (options) {
          var id, self = this;
+
+         this.options = options;
 
          this.flashReady = false;
          this.swfobjectReady = false;
          this.pendingPlay = false;
 
-         id = 'audioalert' + (AudioAlert.id++);
-         AudioAlert.add(id, this);
+         this.id = 'audioalert' + (AudioAlert.id++);
+         AudioAlert.add(this.id, this);
 
          swfobject.addDomLoadEvent(function () {
-            self.init(o, id);
+            self.init();
          });
       }
    };
@@ -55,24 +72,27 @@ var AudioAlert = (function () {
 
    //flash
    AudioAlert.prototype.flash.prototype = {
-      init: function (o, id) {
-         var audio, el, self = this;
+      init: function () {
+         var audio, el, o, self;
+
+         self = this;
+         o = this.options;
 
          el = document.createElement('div');
          el.style.cssText = 'position:fixed; left=0; bottom=0; width=8px; height=8px; overflow:hidden';
 
          audio = document.createElement('div');
-         audio.id = id;
+         audio.id = this.id;
 
          el.appendChild(audio);
          document.body.appendChild(el);
 
-         swfobject.embedSWF(o.swf || 'audioalert-1.0.swf', id, '8', '8', '9.0.0', null, {
+         swfobject.embedSWF(o.swf || 'audioalert-1.0.swf', this.id, '8', '8', '9.0.0', null, {
             mp3: o.mp3
          }, {
             'allowscriptaccess': 'always'
          }, {
-            name: id
+            name: this.id
          }, function (e) {
             self.audio = e.ref; // substituted elem
             self.swfobjectReady = true;
@@ -93,10 +113,9 @@ var AudioAlert = (function () {
       }
    };
 
-   //flash
+   //flash -- global dispath to instances
    (function () {
       AudioAlert.id = 1;
-      // list of instances, needed by onComplete
       AudioAlert.instances = {};
 
       AudioAlert.add = function (id, obj) {
@@ -108,13 +127,31 @@ var AudioAlert = (function () {
       };
 
       // onComplete is called from flash when it is ready to play
-      AudioAlert.onComplete = function (id) {
-         var o = this.get(id);
-         if (o) {
-            o.flashReady = true;
-            if (o.pendingPlay && o.swfobjectReady) {
-               o.play();
+      AudioAlert.onLoadedData = function (id) {
+         var obj = this.get(id);
+         if (obj) {
+            if (obj.options.loadeddata) {
+               obj.options.loadeddata();
             }
+
+            obj.flashReady = true;
+            if (obj.pendingPlay && obj.swfobjectReady) {
+               obj.play();
+            }
+         }
+      };
+
+      AudioAlert.onError = function (id, text) {
+         var obj = this.get(id);
+         if (obj && obj.options.error) {
+            obj.options.error(text);
+         }
+      };
+
+      AudioAlert.onEnded = function (id) {
+         var obj = this.get(id);
+         if (obj && obj.options.ended) {
+            obj.options.ended();
          }
       };
    }());
