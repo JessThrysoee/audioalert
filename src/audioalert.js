@@ -33,12 +33,16 @@ var AudioAlert = (function () {
          audio.src = audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
 
          //http://dev.w3.org/html5/spec-author-view/video.html#mediaevents
+         //
+         //when the first frame of the media has finished loading.
          if (o.loadeddata) {
             audio.addEventListener('loadeddata', o.loadeddata, false);
          }
+         //when playback completes
          if (o.ended) {
             audio.addEventListener('ended', o.ended, false);
          }
+         //when an error occurs
          if (o.error) {
             audio.addEventListener('error', o.error, false);
          }
