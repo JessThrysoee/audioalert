@@ -97,7 +97,7 @@ var AudioAlert = (function () {
          el.appendChild(audio);
          document.body.appendChild(el);
 
-         swfobject.embedSWF(o.swf || 'audioalert-1.0.swf', this.id, '8', '8', '9.0.0', null, {
+         swfobject.embedSWF(o.swf || 'audioalert-1.2.swf', this.id, '8', '8', '9.0.0', null, {
             mp3: o.mp3
          }, {
             'allowscriptaccess': 'always'

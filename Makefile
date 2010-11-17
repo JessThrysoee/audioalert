@@ -1,7 +1,7 @@
 
 VERSION=audioalert-1.2
 
-all: archive
+all: javascript actionscript
 
 
 # Minify javascript with yui-compressor - http://developer.yahoo.com/yui/compressor
