@@ -7,6 +7,35 @@
  * http://www.opensource.org/licenses/mit-license.php
  */
 
+/*
+ * Usage:
+ *
+ *   var audioalert = AudioAlert({
+ *      ogg: 'alert.ogg',                               // required
+ *      mp3: 'alert.mp3',                               // required
+ *      sfw: 'alertnative/path/to/audioalert-x.y.swf'   // optional
+ *      error: function () {                            // optional
+ *         // error event handler
+ *      },
+ *      ended: function () {                            // optional
+ *         // playback ended event handler
+ *      },
+ *      loadeddata: function () {                       // optional
+ *         // media loadeddata event handler
+ *      }
+ *   });
+ *
+ *   // bind 'error', 'loadeddata', or 'ended' event handler
+ *   // after creation, e.g.
+ *   audioalert.bind('error', function (e) {
+ *      // error event handler
+ *   });
+ *
+ *   // sound alert
+ *   audioalert.play();
+ *
+ */
+
 /*global window, Audio, swfobject*/
 /*jslint newcap:false*/
 
