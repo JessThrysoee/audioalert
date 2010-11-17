@@ -25,12 +25,10 @@ var AudioAlert = (function () {
    AudioAlert.prototype = {
       //html5
       html5: function (options) {
-         var audio, o = options;
+         var audio, o;
 
-         this.options = options;
-
-         audio = new Audio();
-         audio.src = audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
+         o = this.options = options;
+         audio = this.audio = new Audio();
 
          //http://dev.w3.org/html5/spec-author-view/video.html#mediaevents
          //
@@ -47,7 +45,7 @@ var AudioAlert = (function () {
             audio.addEventListener('error', o.error, false);
          }
 
-         this.audio = audio;
+         audio.src = audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
       },
 
       //flash
