@@ -1,5 +1,5 @@
 
-VERSION=audioalert-1.0
+VERSION=audioalert-1.1
 
 all: archive
 
