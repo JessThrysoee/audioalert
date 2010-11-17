@@ -20,40 +20,15 @@
 
 
       <script>
-         // expected error
-         AudioAlert({
-            ogg: 'sound/doesnotexist.ogg',
-            mp3: 'sound/doesnotexist.mp3',
-            error: function () {
-               msg('doesnotexist: expected error');
-            }
-         });
+         var gong;
 
-         // play welcome asap, and after 'ended' event start countdown
-         AudioAlert({
-            ogg: 'sound/welcome.ogg',
-            mp3: 'sound/welcome.mp3',
-            swf: 'audioalert-1.2.swf',
-            loadeddata: function () {
-               msg('welcome: loadeddata');
-            },
-            ended: countdown
-         }).play();  // play asap
+         // display debug msg
+         function msg(txt) {
+            var el = document.createElement('p');
+            el.innerHTML = txt;
+            document.body.appendChild(el);
+         }
 
-
-         // load the gong
-         var gong = AudioAlert({
-            ogg: 'sound/gong.ogg',
-            mp3: 'sound/gong.mp3',
-            loadeddata: function () {
-               msg('gong: loadeddata');
-            },
-         });
-
-         // bind event handler on gong 'ended'
-         gong.bind('ended', function () {
-            msg('gong ended (bind)');
-         });
 
          // count down from five and sound the gong on zero
          function countdown() {
@@ -76,12 +51,43 @@
             }, 1000);
          }
 
-         // display debug msg
-         function msg(txt) {
-            var el = document.createElement('p');
-            el.innerHTML = txt;
-            document.body.appendChild(el);
-         }
+
+         // expected error
+         AudioAlert({
+            ogg: 'sound/doesnotexist.ogg',
+            mp3: 'sound/doesnotexist.mp3',
+            error: function (e) {
+               msg('doesnotexist: expected error');
+            }
+         }).play();
+
+
+         // start loading the gong
+         gong = AudioAlert({
+            ogg: 'sound/gong.ogg',
+            mp3: 'sound/gong.mp3',
+            loadeddata: function () {
+               msg('gong: loadeddata');
+            }
+         });
+
+
+         // bind event handler on gong 'ended'
+         gong.bind('ended', function () {
+            msg('gong ended (bind)');
+         });
+
+
+         // play welcome asap, and after 'ended' event start countdown
+         AudioAlert({
+            ogg: 'sound/welcome.ogg',
+            mp3: 'sound/welcome.mp3',
+            swf: 'audioalert-1.2.swf',
+            loadeddata: function () {
+               msg('welcome: loadeddata');
+            },
+            ended: countdown
+         }).play(); // play asap
 
       </script>
 
