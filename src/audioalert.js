@@ -10,7 +10,7 @@
 /*
  * Usage:
  *
- *   var audioalert = AudioAlert({
+ *   var audioalert = new AudioAlert({
  *      ogg: 'alert.ogg',                               // required
  *      mp3: 'alert.mp3',                               // required
  *      sfw: 'alertnative/path/to/audioalert-x.y.swf'   // optional
@@ -99,11 +99,13 @@ var AudioAlert = (function () {
    //html5
    AudioAlert.prototype.html5.prototype = {
       play: function () {
+         // if readyState != 4:
+         // * chrome ignores play(), but not a late set autoplay.
+         // * firefox ignores as late set autoplay, but executes play() when ready
          if (this.audio.readyState != 4) {
             this.audio.autoplay = true;
-         } else {
-            this.audio.play();
          }
+         this.audio.play();
       },
 
       bind: function (eventType, handler) {
