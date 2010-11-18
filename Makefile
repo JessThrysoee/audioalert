@@ -1,5 +1,5 @@
 
-VERSION=audioalert-1.2
+VERSION=audioalert-1.3
 
 all: javascript actionscript
 
