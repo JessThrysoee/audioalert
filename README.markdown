@@ -5,7 +5,8 @@ HTML5 audio alert library with flash-fallback.
 
 To sound an alert call:
 
-    AudioAlert({ogg:'alert.ogg', mp3:'alert.mp3'}).play();
+    var audioalert = new AudioAlert({ogg:'alert.ogg', mp3:'alert.mp3'});
+    audioalert.play();
 
 The demo.html demonstrates usage of the supported event types, 'loadeddata', 'ended', and 'error'. A live demo is available at [thrysoee.dk/audioalert](http://thrysoee.dk/audioalert).
 
@@ -13,7 +14,7 @@ The demo.html demonstrates usage of the supported event types, 'loadeddata', 'en
 API
 ==========
 
-    var audioalert = AudioAlert({
+    var audioalert = new AudioAlert({
        ogg: 'alert.ogg',                                // required
        mp3: 'alert.mp3',                                // required
        sfw: 'alertnative/path/to/audioalert-x.y.swf',   // optional

@@ -20,7 +20,7 @@
 
 
       <script>
-         var gong;
+         var doesnotexist, welcome, gong;
 
          // display debug msg
          function msg(txt) {
@@ -53,17 +53,18 @@
 
 
          // expected error
-         AudioAlert({
+         doesnotexist = new AudioAlert({
             ogg: 'sound/doesnotexist.ogg',
             mp3: 'sound/doesnotexist.mp3',
             error: function (e) {
                msg('doesnotexist: expected error');
             }
-         }).play();
+         });
+         doesnotexist.play();
 
 
          // start loading the gong
-         gong = AudioAlert({
+         gong = new AudioAlert({
             ogg: 'sound/gong.ogg',
             mp3: 'sound/gong.mp3',
             loadeddata: function () {
@@ -79,7 +80,7 @@
 
 
          // play welcome asap, and after 'ended' event start countdown
-         AudioAlert({
+         welcome = new AudioAlert({
             ogg: 'sound/welcome.ogg',
             mp3: 'sound/welcome.mp3',
             swf: 'audioalert-1.2.swf',
@@ -87,7 +88,8 @@
                msg('welcome: loadeddata');
             },
             ended: countdown
-         }).play(); // play asap
+         });
+         welcome.play(); // play asap
 
       </script>
 

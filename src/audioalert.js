@@ -59,6 +59,34 @@ var AudioAlert = (function () {
          o = this.options = options;
          audio = this.audio = new Audio();
 
+         audio.addEventListener('loadeddata', function () {
+            console.log('loadeddata');
+         }, false);
+         audio.addEventListener('loadstart', function () {
+            console.log('loadstart');
+         }, false);
+         audio.addEventListener('error', function () {
+            console.log('error');
+         }, false);
+         audio.addEventListener('abort', function () {
+            console.log('abort');
+         }, false);
+         audio.addEventListener('stalled', function () {
+            console.log('stalled');
+         }, false);
+         audio.addEventListener('loadedmetadata', function () {
+            console.log('loadedmetadata');
+         }, false);
+         audio.addEventListener('waiting', function () {
+            console.log('waiting');
+         }, false);
+         audio.addEventListener('canplay', function () {
+            console.log('canplay');
+         }, false);
+         audio.addEventListener('canplaythrough', function () {
+            console.log('canplaythrough');
+         }, false);
+
          //http://dev.w3.org/html5/spec-author-view/video.html#mediaevents
          //
          //when the first frame of the media has finished loading.
@@ -74,7 +102,7 @@ var AudioAlert = (function () {
             audio.addEventListener('error', o.error, false);
          }
 
-         audio.src = audio.canPlayType('audio/ogg') ? o.ogg : o.mp3;
+         audio.src = audio.canPlayType('audio/mpeg') ? o.mp3 : o.ogg;
       },
 
       //flash
@@ -99,8 +127,13 @@ var AudioAlert = (function () {
    //html5
    AudioAlert.prototype.html5.prototype = {
       play: function () {
-         this.audio.play();
+         if (this.audio.readyState != 4) {
+            this.audio.autoplay = true;
+         } else {
+            this.audio.play();
+         }
       },
+
       bind: function (eventType, handler) {
          this.options[eventType] = handler;
          this.audio.addEventListener(eventType, handler, false);
